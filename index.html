@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FocusFlow - Enhanced To-Do App</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">FocusFlow</p>
+          <h1>Plan smarter. Finish faster.</h1>
+          <p class="subtitle">
+            An enhanced to-do workspace with smart filters, priorities, and
+            seamless progress tracking.
+          </p>
+        </div>
+        <button class="theme-toggle" id="themeToggle" type="button">
+          <span>Toggle theme</span>
+          <span class="toggle-indicator" aria-hidden="true"></span>
+        </button>
+      </header>
+
+      <section class="panel">
+        <form class="task-form" id="taskForm">
+          <div class="field-group">
+            <label for="taskTitle">Task</label>
+            <input
+              id="taskTitle"
+              type="text"
+              placeholder="Draft product brief"
+              required
+            />
+          </div>
+          <div class="field-group">
+            <label for="taskNotes">Notes</label>
+            <input
+              id="taskNotes"
+              type="text"
+              placeholder="Add a quick context"
+            />
+          </div>
+          <div class="field-row">
+            <div class="field-group">
+              <label for="taskDue">Due date</label>
+              <input id="taskDue" type="date" />
+            </div>
+            <div class="field-group">
+              <label for="taskPriority">Priority</label>
+              <select id="taskPriority">
+                <option value="low">Low</option>
+                <option value="medium" selected>Medium</option>
+                <option value="high">High</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label for="taskTag">Tag</label>
+              <input id="taskTag" type="text" placeholder="Marketing" />
+            </div>
+          </div>
+          <button class="primary" type="submit">Add task</button>
+        </form>
+      </section>
+
+      <section class="panel">
+        <div class="stats">
+          <div class="stat-card">
+            <p class="stat-label">Total</p>
+            <p class="stat-value" id="statTotal">0</p>
+          </div>
+          <div class="stat-card">
+            <p class="stat-label">Active</p>
+            <p class="stat-value" id="statActive">0</p>
+          </div>
+          <div class="stat-card">
+            <p class="stat-label">Completed</p>
+            <p class="stat-value" id="statCompleted">0</p>
+          </div>
+        </div>
+        <div class="toolbar">
+          <div class="tabs" role="tablist">
+            <button class="tab active" data-filter="all" type="button">
+              All
+            </button>
+            <button class="tab" data-filter="active" type="button">
+              Active
+            </button>
+            <button class="tab" data-filter="completed" type="button">
+              Completed
+            </button>
+          </div>
+          <div class="toolbar-actions">
+            <div class="select">
+              <label for="priorityFilter" class="sr-only">Priority</label>
+              <select id="priorityFilter">
+                <option value="all" selected>All priorities</option>
+                <option value="high">High priority</option>
+                <option value="medium">Medium priority</option>
+                <option value="low">Low priority</option>
+              </select>
+            </div>
+            <div class="select">
+              <label for="sortOrder" class="sr-only">Sort</label>
+              <select id="sortOrder">
+                <option value="created" selected>Newest first</option>
+                <option value="due">Due date</option>
+                <option value="priority">Priority</option>
+              </select>
+            </div>
+            <div class="search">
+              <input
+                id="searchInput"
+                type="search"
+                placeholder="Search tasks"
+              />
+            </div>
+            <button class="ghost" id="clearCompleted" type="button">
+              Clear completed
+            </button>
+          </div>
+        </div>
+
+        <div class="progress">
+          <div>
+            <p class="progress-label">Progress</p>
+            <p class="progress-count" id="progressCount">0 of 0 complete</p>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+        </div>
+
+        <ul class="task-list" id="taskList"></ul>
+
+        <div class="empty" id="emptyState">
+          <h3>No tasks yet</h3>
+          <p>
+            Add your first task to start building momentum. Try adding a tag or
+            setting a priority.
+          </p>
+        </div>
+      </section>
+    </div>
+
+    <template id="taskTemplate">
+      <li class="task">
+        <div class="task-main">
+          <button class="checkbox" type="button" aria-pressed="false">
+            <span class="check"></span>
+          </button>
+          <div class="task-content">
+            <div class="task-header">
+              <h4 class="task-title"></h4>
+              <span class="badge priority"></span>
+            </div>
+            <p class="task-notes"></p>
+            <div class="task-meta">
+              <span class="badge due"></span>
+              <span class="badge tag"></span>
+            </div>
+          </div>
+        </div>
+        <div class="task-actions">
+          <button class="ghost edit" type="button">Edit</button>
+          <button class="ghost delete" type="button">Delete</button>
+        </div>
+      </li>
+    </template>
+
+    <template id="editTemplate">
+      <form class="edit-form">
+        <input class="edit-title" type="text" required />
+        <input class="edit-notes" type="text" placeholder="Notes" />
+        <div class="field-row">
+          <input class="edit-due" type="date" />
+          <select class="edit-priority">
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+          </select>
+          <input class="edit-tag" type="text" placeholder="Tag" />
+        </div>
+        <div class="edit-actions">
+          <button class="primary" type="submit">Save</button>
+          <button class="ghost cancel" type="button">Cancel</button>
+        </div>
+      </form>
+    </template>
+
+    <script src="app.js"></script>
+  </body>
+</html>
