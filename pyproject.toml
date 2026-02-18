@@ -1,0 +1,8 @@
+[project]
+name = "message-first-ipaas"
+version = "0.1.0"
+description = "Enterprise message-first iPaaS reference implementation"
+requires-python = ">=3.11"
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]

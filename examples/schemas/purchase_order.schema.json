@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PurchaseOrder",
+  "type": "object",
+  "required": ["orderId", "buyer", "amount"],
+  "properties": {
+    "orderId": { "type": "string" },
+    "buyer": { "type": "string" },
+    "amount": { "type": "number" },
+    "currency": { "type": "string", "default": "USD" }
+  }
+}
