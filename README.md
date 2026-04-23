@@ -51,15 +51,67 @@ Domain errors are separated as:
 - `ValidationError`
 - `RoutingError`
 
+## Access the application (demo API)
+
+The project now includes a runnable HTTP API so you can interact with the platform directly.
+
+### Start server
+
+From repository root:
+
+```bash
+PYTHONPATH=src python run_app.py
+```
+
+Server starts on: `http://127.0.0.1:8080`.
+
+### Endpoints
+
+- `GET /health` → health check
+- `GET /summary` → current message/app/map registry
+- `POST /demo/route` → route a sample purchase order through demo integration map
+
+### Example calls
+
+```bash
+curl http://127.0.0.1:8080/health
+```
+
+```bash
+curl http://127.0.0.1:8080/summary
+```
+
+```bash
+curl -X POST http://127.0.0.1:8080/demo/route \
+  -H 'Content-Type: application/json' \
+  -d '{"orderId":"PO-100","buyer":"acme","amount":300}'
+```
+
+Expected payload section in response:
+
+```json
+{
+  "header": {
+    "id": "PO-100",
+    "customer_name": "ACME"
+  },
+  "financials": {
+    "total": "300"
+  }
+}
+```
+
 ## Project layout
 
 - `src/message_first_ipaas/models.py` – contract, connectivity, app, and map models.
 - `src/message_first_ipaas/platform.py` – registration, validation, routing, connectivity resolution.
 - `src/message_first_ipaas/exceptions.py` – domain exceptions.
+- `src/message_first_ipaas/app.py` – runnable demo HTTP API.
+- `run_app.py` – local server launcher.
 - `examples/schemas/` – JSON Schema + XSD examples.
 - `tests/test_platform.py` – unit tests for mapping, validation, and errors.
 
-## Quick example
+## Quick in-code example
 
 ```python
 from message_first_ipaas.models import MessageDefinition, PartnerApplication, Connectivity, IntegrationMap, FieldMap
