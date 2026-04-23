@@ -69,6 +69,8 @@ Server starts on: `http://127.0.0.1:8080`.
 
 - `GET /health` → health check
 - `GET /summary` → current message/app/map registry
+- `GET /metrics` → monitoring counters + recent executions
+- `GET /dashboard` → execution + monitoring UI
 - `POST /demo/route` → route a sample purchase order through demo integration map
 
 ### Example calls
@@ -79,6 +81,16 @@ curl http://127.0.0.1:8080/health
 
 ```bash
 curl http://127.0.0.1:8080/summary
+```
+
+```bash
+curl http://127.0.0.1:8080/metrics
+```
+
+Open UI dashboard in browser:
+
+```text
+http://127.0.0.1:8080/dashboard
 ```
 
 ```bash

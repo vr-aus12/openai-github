@@ -43,7 +43,13 @@ class APITests(unittest.TestCase):
             self.assertEqual(response.status, 200)
             self.assertEqual(json.loads(response.read().decode("utf-8"))["status"], "ok")
 
-    def test_demo_route(self) -> None:
+    def test_dashboard_page(self) -> None:
+        with urlopen(self._url("/dashboard")) as response:
+            html = response.read().decode("utf-8")
+            self.assertEqual(response.status, 200)
+            self.assertIn("Message-first iPaaS Dashboard", html)
+
+    def test_demo_route_and_metrics(self) -> None:
         req = Request(
             self._url("/demo/route"),
             method="POST",
@@ -54,6 +60,13 @@ class APITests(unittest.TestCase):
             body = json.loads(response.read().decode("utf-8"))
             self.assertEqual(response.status, 200)
             self.assertEqual(body["payload"]["header"]["customer_name"], "ACME")
+
+        with urlopen(self._url("/metrics")) as response:
+            metrics = json.loads(response.read().decode("utf-8"))
+            self.assertEqual(metrics["route_requests"], 1)
+            self.assertEqual(metrics["route_success"], 1)
+            self.assertEqual(metrics["route_errors"], 0)
+            self.assertEqual(metrics["recent_executions"][0]["status"], "success")
 
 
 if __name__ == "__main__":
